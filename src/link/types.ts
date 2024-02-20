@@ -1,6 +1,5 @@
 import type { RouteInstance, RouteParams, RouteQuery } from 'atomic-router';
 
-// TODO: return AnchorHTMLAttributes
 export interface LinkProps<Params extends RouteParams> {
   to: RouteInstance<Params> | string;
   params?: Params;
