@@ -1,7 +1,7 @@
 <script setup lang="ts" generic="Params extends RouteParams">
 import type { RouteParams } from 'atomic-router';
 import { shallowRef } from 'vue';
-import RouteLink from './route-link';
+import RouteLink from './route-link.vue';
 import type { LinkEmits, LinkProps } from './types';
 
 const props = defineProps<LinkProps<Params>>();
@@ -29,6 +29,8 @@ defineExpose({
     </a>
   </template>
   <template v-else>
-    <RouteLink v-bind="props" @click="onRouteClick" />
+    <RouteLink v-bind="props" @click="onRouteClick">
+      <slot />
+    </RouteLink>
   </template>
 </template>

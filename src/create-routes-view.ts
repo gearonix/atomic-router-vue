@@ -1,23 +1,24 @@
 import type { RouteInstance, RouteParams } from 'atomic-router';
-import { computed, defineComponent, h } from 'vue';
-import type { RouteComponent } from './shared';
+import { computed, defineComponent, h, unref } from 'vue';
+import type { Component, DefineComponent } from 'vue';
 import { useIsOpened } from './use-is-opened';
 
 export interface RouteRecord<Params extends RouteParams> {
   route: RouteInstance<Params> | RouteInstance<Params>[];
-  view: RouteComponent;
-  layout?: RouteComponent;
+  view: Component | DefineComponent;
+  layout?: Component | DefineComponent;
 }
 
 export interface RoutesViewConfig {
   routes: RouteRecord<any>[];
-  otherwise?: RouteComponent;
+  otherwise?: Component | DefineComponent;
 }
 
 export function createRoutesView<Config extends RoutesViewConfig>(config: Config) {
   return defineComponent({
     setup(props: Omit<Config, keyof Config>) {
       const mergedConfig = { ...config, ...props } as Config;
+
       const routes = computed(() =>
         mergedConfig.routes.map((routeRecord) => {
           const isOpened = useIsOpened(routeRecord.route);
@@ -33,7 +34,9 @@ export function createRoutesView<Config extends RoutesViewConfig>(config: Config
     },
     render() {
       for (const route of this.routes) {
-        if (route.isOpened) {
+        const isOpened = unref(route.isOpened);
+
+        if (isOpened) {
           if (route.layout) {
             return h(
               route.layout,
@@ -48,8 +51,10 @@ export function createRoutesView<Config extends RoutesViewConfig>(config: Config
         }
       }
 
-      if (this.mergedConfig.otherwise)
-        return h(this.mergedConfig.otherwise);
+      const { otherwise } = this.mergedConfig;
+
+      if (otherwise)
+        return h(otherwise);
 
       return null;
     },

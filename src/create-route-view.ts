@@ -1,32 +1,34 @@
 import type { RouteInstance, RouteParams } from 'atomic-router';
 import { defineComponent, h } from 'vue';
-import type { Debug, RouteComponent } from './shared';
+import type { Component, DefineComponent } from 'vue';
 import { useIsOpened } from './use-is-opened';
 
 export interface RouteViewConfig<Params extends RouteParams> {
   route: RouteInstance<Params> | RouteInstance<Params>[];
-  view: RouteComponent;
-  otherwise?: RouteComponent;
+  view: Component | DefineComponent;
+  otherwise?: Component | DefineComponent;
 }
 
 export function createRouteView<
   Params extends RouteParams,
-  Config extends Debug<RouteViewConfig<Params>>,
+  Config extends Partial<RouteViewConfig<Params>>,
 >(config: Config) {
   return defineComponent({
     setup(props: RouteViewConfig<Params>) {
-      const isOpened = useIsOpened(props.route);
+      const mergedConfig = { ...config, ...props } as RouteViewConfig<Params>;
 
-      return { isOpened };
+      const isOpened = useIsOpened(mergedConfig.route);
+
+      return { isOpened, mergedConfig };
     },
     render() {
-      const mergedConfig = { ...config, ...this.$props } as RouteViewConfig<Params>;
+      const { view, otherwise } = this.mergedConfig;
 
       if (this.isOpened)
-        return h(mergedConfig.view, this.$props);
+        return h(view, this.$props);
 
-      if (mergedConfig.otherwise)
-        return h(mergedConfig.otherwise, this.$props);
+      if (otherwise)
+        return h(otherwise, this.$props);
 
       return null;
     },
