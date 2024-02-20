@@ -1,4 +1,3 @@
-import type { createHistoryRouter } from 'atomic-router';
 import type { App, InjectionKey } from 'vue';
 import { inject } from 'vue';
 import { Link, Route } from './index';
@@ -7,7 +6,10 @@ export interface AtomicRouter {
   install: (app: App) => void;
 }
 
-export type Router = ReturnType<typeof createHistoryRouter>;
+// TODO: rewrite this type,
+// unbuild breaks with external effector types for some reason
+// when using ReturnType<typeof createHistoryRouter>
+export type Router = any;
 
 export const routerKey = Symbol('router') as InjectionKey<Router>;
 

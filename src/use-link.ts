@@ -12,6 +12,7 @@ export function useLink<Params extends RouteParams>(
 ): MaybeRef<string> {
   const router = useRouter();
 
+  // @ts-expect-error breaks because Router has any type for now
   const routeObj = router.routes.find(routeObj => routeObj.route === route);
 
   if (!routeObj)
