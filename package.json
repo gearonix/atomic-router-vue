@@ -50,7 +50,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prepublishOnly": "pnpm build",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepare": "simple-git-hooks"
   },
   "peerDependencies": {
     "atomic-router": "^0.10.0",
@@ -68,10 +69,18 @@
     "effector": "^23.2.0",
     "effector-vue": "^23.0.0",
     "eslint": "^8.56.0",
+    "lint-staged": "^15.2.2",
     "mkdist": "^1.4.0",
+    "simple-git-hooks": "^2.9.0",
     "typescript": "^5.3.3",
     "unbuild": "2.0.0",
     "vite": "^5.1.3",
     "vue": "^3.4.19"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged && pnpm typecheck"
+  },
+  "lint-staged": {
+    "*": "eslint --fix"
   }
 }
