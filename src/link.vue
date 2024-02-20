@@ -13,11 +13,19 @@ export interface LinkProps<Params extends RouteParams> extends AnchorHTMLAttribu
   inactiveClassName?: string
 }
 
+export interface LinkEmits {
+  (e: 'click', evt: MouseEvent): void
+}
+
 const props = defineProps<LinkProps<Params>>()
 
-const { to, className, ...linkProps } = props
+const emit = defineEmits<LinkEmits>()
 
 const linkRef = shallowRef<HTMLAnchorElement>()
+
+function onRouteClick(evt: MouseEvent) {
+  emit('click', evt)
+}
 
 defineExpose({
   linkRef,
@@ -27,13 +35,13 @@ defineExpose({
 <template>
   <template v-if="typeof to === 'string'">
     <a
-      v-bind="linkProps"
+      v-bind="props"
       ref="linkRef" :href="to" :class="className"
     >
       <slot />
     </a>
   </template>
   <template v-else>
-    <RouteLink v-bind="props" />
+    <RouteLink v-bind="props" @click="onRouteClick" />
   </template>
 </template>
