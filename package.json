@@ -55,7 +55,6 @@
   "peerDependencies": {
     "atomic-router": "^0.10.0",
     "effector": "^22.8.8 || ^23",
-    "effector-react": "^22.1.0 || ^23",
     "effector-vue": "^21.0.0",
     "react": "^17 || ^18",
     "vue": "^3.2.0"
