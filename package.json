@@ -46,7 +46,8 @@
     "lint:fix": "eslint . --fix",
     "prepublishOnly": "pnpm build",
     "prepare": "simple-git-hooks",
-    "test": "vitest"
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
     "atomic-router": "^0.10.0",
@@ -75,7 +76,7 @@
     "vue": "^3.4.19"
   },
   "simple-git-hooks": {
-    "pre-commit": "pnpm lint-staged"
+    "pre-commit": "pnpm lint-staged && pnpm typecheck"
   },
   "lint-staged": {
     "*": "eslint --fix"
