@@ -11,8 +11,6 @@ export type Router = ReturnType<typeof createHistoryRouter>;
 
 export const routerKey = Symbol('router') as InjectionKey<Router>;
 
-export const isBrowser = typeof document !== 'undefined';
-
 export function createRouter(router: Router): AtomicRouter {
   return {
     install(app: App) {

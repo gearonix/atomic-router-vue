@@ -1,11 +1,11 @@
 <script setup lang="ts" generic="Params extends RouteParams">
 import type { RouteInstance, RouteParams } from 'atomic-router';
-import type { RouteComponent } from './shared';
+import type { Component, DefineComponent } from 'vue';
 import { useIsOpened } from './use-is-opened';
 
 interface Props<Params extends RouteParams> {
   route: RouteInstance<Params> | RouteInstance<Params>[];
-  view: RouteComponent;
+  view: Component | DefineComponent;
 }
 
 const { route, view } = defineProps<Props<Params>>();
