@@ -49,7 +49,8 @@
     "dev:preview": "vite preview playground",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "pnpm build",
+    "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
     "atomic-router": "^0.10.0",

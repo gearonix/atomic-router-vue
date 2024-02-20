@@ -1,10 +1,9 @@
 <script setup lang="ts" generic="Params extends RouteParams">
 import type { RouteInstance, RouteParams } from 'atomic-router'
-import { buildPath } from 'atomic-router'
 import { useUnit } from 'effector-vue/composition'
-import { computed } from 'vue'
 import type { LinkEmits, LinkProps } from './link.vue'
-import { useRouter } from './router'
+import { useRouter } from './router-provider'
+import {useLink} from "./use-link";
 
 const props = defineProps<LinkProps<Params>>()
 
@@ -16,24 +15,22 @@ const {
   target,
 } = props
 
-const toAsInstance = props.to as RouteInstance<Params>
+const route = props.to as RouteInstance<Params>
 
 const router = useRouter()
 
-const routeObj = router.routes.find(routeObj => routeObj.route === toAsInstance)
+const routeObj = router.routes.find(routeObj => routeObj.route === route)
 
 if (!routeObj)
   throw new Error('[RouteLink] Route not found')
 
-const [isOpened, navigate] = useUnit([routeObj.route.$isOpened, toAsInstance.navigate])
+const [isOpened, navigate] = useUnit([routeObj.route.$isOpened, route.navigate])
 
-const href = computed(() => {
-  return buildPath({
-    pathCreator: routeObj.path,
-    params: params || {},
-    query: query || {},
-  })
-})
+const href = useLink(
+  route,
+  params,
+  query
+)
 
 function handleClick(evt: MouseEvent) {
   emit('click', evt)
@@ -53,6 +50,7 @@ function handleClick(evt: MouseEvent) {
     query: query || {},
   })
 }
+
 </script>
 
 <template>
